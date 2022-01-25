@@ -39,4 +39,25 @@ public class CampaignController {
         return campaignRepository.save(campaign);
     }
 
+    @PutMapping("/campaignes/{id}")
+    public ResponseEntity<Campaign> updateCampaign(@PathVariable long id, @RequestBody Campaign campaignDetails ){
+        Campaign updatedCampaign =null;
+        try {
+            Campaign campaign =campaignRepository.findById(id)
+                    .orElseThrow(()->new ResourceNotFoundException("Campaign of Id number \"+id+\" doesn't exist."));
+            campaign.setName(campaignDetails.getName());
+            campaign.setBidAmount(campaignDetails.getBidAmount());
+            campaign.setFund(campaignDetails.getFund());
+            campaign.setKeywords(campaignDetails.getKeywords());
+            campaign.setRadius(campaignDetails.getRadius());
+            campaign.setStatus(campaignDetails.isStatus());
+            campaign.setTown(campaignDetails.getTown());
+
+            updatedCampaign =campaignRepository.save(campaign);
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok(updatedCampaign);
+    }
+
 }
