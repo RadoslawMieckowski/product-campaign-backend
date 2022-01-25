@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins="http://localhost:4200")
 @RestController
@@ -60,4 +62,17 @@ public class CampaignController {
         return ResponseEntity.ok(updatedCampaign);
     }
 
+    @DeleteMapping("/campaignes/{id}")
+    public ResponseEntity<Map<String, Boolean>> deleteCampaign(@PathVariable Long id){
+        try {
+            Campaign campaign=campaignRepository.findById(id)
+                    .orElseThrow(()->new ResourceNotFoundException("Campaign of Id number \"+id+\" doesn't exist."));
+            campaignRepository.delete(campaign);
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
+        }
+        Map <String,Boolean>response=new HashMap<>();
+        response.put("deleted", true);
+        return ResponseEntity.ok(response);
+    }
 }
