@@ -19,7 +19,6 @@ public class CampaignController {
     public List<Campaign> getAllCampaignes() {
         return campaignRepository.findAll();
     }
-
     @PostMapping("/campaignes")
     public Campaign createCampaign(@RequestBody Campaign campaign) {
         return campaignRepository.save(campaign);
